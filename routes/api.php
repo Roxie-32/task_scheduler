@@ -25,18 +25,23 @@ Route::post('/user/signup', [
 Route::post('/user/signin', [
 UserController::class, 'signin'
 ]);
+
 Route::post('/task', [
     TaskController::class, 'addTask'
-]);
+])->middleware('auth.jwt');
+
 Route::get('/tasks', [
     TaskController::class, 'getAllTasks'
-]);
+])->middleware('auth.jwt');
+
 Route::get('/task/{id}', [
     TaskController::class, 'getTask'
-]);
+])->middleware('auth.jwt');
+
 Route::put('/task/{id}', [
     TaskController::class, 'updateTask'
-]);
+])->middleware('auth.jwt');
+
 Route::delete('/task/{id}', [
     TaskController::class, 'deleteTask'
-]);
+])->middleware('auth.jwt');

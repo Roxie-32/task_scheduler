@@ -2,8 +2,14 @@
 
 namespace App\Exceptions;
 
+use Exception;
+use Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\UserNotDefinedException;
 
 class Handler extends ExceptionHandler
 {
@@ -33,8 +39,25 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        // $this->reportable(function (Throwable $e) {
+        //     //
+        // });
+        $this->renderable(function(TokenInvalidException $e, $request){
+                return Response::json(['error'=>'Invalid token'],401);
+        });
+        $this->renderable(function (TokenExpiredException $e, $request) {
+            return Response::json(['error'=>'Token has Expired'],401);
+        });
+
+        $this->renderable(function (JWTException $e, $request) {
+            return Response::json(['error'=>'Token not parsed'],401);
+        });
+
+        $this->renderable(function (Exception $e, $request) {
+            return Response::json(['error'=>'An Error Occured'],500);
+        });
+        $this->renderable(function (UserNotDefinedExceptionSSS $e, $request) {
+            return Response::json(['error'=>'An Error Occured'],500);
         });
     }
 }

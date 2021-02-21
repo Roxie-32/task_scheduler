@@ -29,12 +29,21 @@ class UserController extends Controller
 
 
     public function signin(Request $request ){
-        $this->validate($request ,[
-            'uname'=>'required',
-            'password' =>'required'
+        // $this->validate($request ,[
+        //     'email'=>'required',
+        //     'password' =>'required'
+        // ]);
+        $validator = Validator::make($request->all(), [
+            'email' => 'bail|required',
+            'password' => 'bail|required',
+            
         ]);
 
-        $credentials= $request->only('uname','password');
+        if ($validator->fails()) {
+            throw new EventorException($validator->errors()->first());
+        }
+
+        $credentials= $request->only('email','password');
         try{
             if(!$token=JWTAuth::attempt($credentials)) {
                 return response()->json([

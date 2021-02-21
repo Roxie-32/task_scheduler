@@ -23,7 +23,6 @@ class TaskController extends Controller
     }
 
     public function addTask(Request $request){
-
         $task = new Task();
         $task->user_id=$request->input('user_id');
         $task->task_title=$request->input('task_title');
