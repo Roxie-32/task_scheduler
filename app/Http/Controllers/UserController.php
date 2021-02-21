@@ -29,19 +29,10 @@ class UserController extends Controller
 
 
     public function signin(Request $request ){
-        // $this->validate($request ,[
-        //     'email'=>'required',
-        //     'password' =>'required'
-        // ]);
-        $validator = Validator::make($request->all(), [
-            'email' => 'bail|required',
-            'password' => 'bail|required',
-            
+        $this->validate($request ,[
+            'email'=>'required',
+            'password' =>'required'
         ]);
-
-        if ($validator->fails()) {
-            throw new EventorException($validator->errors()->first());
-        }
 
         $credentials= $request->only('email','password');
         try{
