@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Http\Requests\UserStoreRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
@@ -9,12 +10,8 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 
 class UserController extends Controller
 {
-    public function signup(Request $request){
-        $this->validate($request, [
-            'uname' => 'required|bail',
-            'email'=>'required|email|bail|unique:users',
-            'password'=>'required|bail'
-            ]);
+    public function signup(UserStoreRequest $request){
+        
 
             $user = new User();
             $user->uname=$request->input('uname');
@@ -47,6 +44,7 @@ class UserController extends Controller
             ],500);
         }
         return response()->json([
+            
             'token'=>$token
         ],200);         
     }

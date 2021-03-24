@@ -53,10 +53,10 @@ class Handler extends ExceptionHandler
             return Response::json(['error'=>'Token not parsed'],401);
         });
 
-        $this->renderable(function (Exception $e, $request) {
-            return Response::json(['error'=>'An Error Occured'],500);
-        });
-        $this->renderable(function (UserNotDefinedExceptionSSS $e, $request) {
+        // $this->renderable(function (Exception $e, $request) {
+        //     return Response::json(['error'=>'An Error Occured'],500);
+        // });
+        $this->renderable(function (UserNotDefinedException $e, $request) {
             return Response::json(['error'=>'An Error Occured'],500);
         });
     }
