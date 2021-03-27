@@ -17,8 +17,8 @@ class TaskController extends Controller
           return response()->json($response,200);
     }
 
-    public function getTask($id){
-            $task= Task::find($id);
+    public function getTask(){
+            $task= Task::where('user_id', auth('api')->user()->id)->get();
             $response = [
                 'task' => $task
             ];

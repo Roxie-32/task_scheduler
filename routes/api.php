@@ -30,11 +30,11 @@ Route::post('/task', [
     TaskController::class, 'addTask'
 ])->middleware('auth.jwt');
 
-Route::get('/tasks', [
+Route::get('/alltasks', [
     TaskController::class, 'getAllTasks'
 ])->middleware('auth.jwt');
 
-Route::get('/task/{id}', [
+Route::get('/tasks', [
     TaskController::class, 'getTask'
 ])->middleware('auth.jwt');
 
