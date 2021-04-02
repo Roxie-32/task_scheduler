@@ -30,7 +30,7 @@ class UserStoreRequest extends FormRequest
         ];
     }
 
-    public function message()
+    public function messages()
     {
         return [
             'uname.required'=>'Username Is Required',

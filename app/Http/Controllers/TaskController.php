@@ -12,8 +12,6 @@ class TaskController extends Controller
         $response = [
             'tasks' => $tasks
         ];
-        
-        
           return response()->json($response,200);
     }
 
@@ -28,11 +26,11 @@ class TaskController extends Controller
     public function addTask(TaskStoreRequest  $request){
         $task = new Task();
         $task->user_id=auth('api')->user()->id;
-        $task->task_title=$request->input('task_title');
-        $task->task_desc=$request->input('task_desc');
-        $task->task_date=$request->input('task_date');
-        $task->task_time_start=$request->input('task_time_start');
-        $task->task_time_end=$request->input('task_time_end');
+        $task->title=$request->input('title');
+        $task->description=$request->input('description');
+        $task->datetime=$request->input('datetime');
+     
+        $task->completed= (bool) $request->input('completed');
 
         $task->save();
         return response()->json(['task'=>$task], 201);
@@ -42,28 +40,46 @@ class TaskController extends Controller
     }
 
     public function updateTask(TaskStoreRequest $request, $id){
-            $task = Task::find($id);
-            if(!$task) {
+
+        $user_id = auth('api')->user()->id;
+        
+
+        $result = Task::where('user_id', $user_id)->where('id', $id)->get();
+        
+            if(count($result)==0) {
                 return response()->json(['message'=>'Document not found'],404);
+            }else{
+                $task = Task::find($id);
+                if(!$task) {
+                    return response()->json(['message'=>'Document not found'],404);
+                }
+                $task->user_id=auth('api')->user()->id;
+                $task->title=$request->input('title');
+                $task->description=$request->input('description');
+                $task->datetime=$request->input('datetime');
+                $task->completed=$request->input('completed');
+        
+                $task->save();
+                return response()->json(['task'=>$task], 200);
             }
-            $task->user_id=auth('api')->user()->id;
-            $task->task_title=$request->input('task_title');
-            $task->task_desc=$request->input('task_desc');
-            $task->task_date=$request->input('task_date');
-            $task->task_time_start=$request->input('task_time_start');
-            $task->task_time_end=$request->input('task_time_end');
-    
-            $task->save();
-            return response()->json(['task'=>$task], 200);
+       
 
         }
 
         public function deleteTask($id){
+            $user_id = auth('api')->user()->id;
+        
+
+            $result = Task::where('user_id', $user_id)->where('id', $id)->get();
+            
+                if(count($result)==0) {
+                    return response()->json(['message'=>'Document not found'],404);
+                }else{
             $task= Task::find($id);
            $check= $task->delete();
            if($check==true){
             return response()->json(['task'=>'Task deleted'], 200);
-
+           }
            }
 
         }

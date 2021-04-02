@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\UserFetchRequest;
 use App\Models\User;
 use App\Http\Requests\UserStoreRequest;
 use Illuminate\Http\Request;
@@ -26,11 +28,9 @@ class UserController extends Controller
 
 
     public function signin(Request $request ){
-        $this->validate($request ,[
-            'email'=>'required',
-            'password' =>'required'
-        ]);
-
+        $this->validate($request,[
+        'email'=>'required|email',
+        'password'=>'required']);
         $credentials= $request->only('email','password');
         try{
             if(!$token=JWTAuth::attempt($credentials)) {
